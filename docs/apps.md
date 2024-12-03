@@ -161,7 +161,7 @@ After this, [read the learning from demonstration instructions](learning_from_de
 
 ### Grasp an Object
 
-![](./images/VisualServoing.gif)
+![](https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExMzFqNzFyd3QzdmtxaG5lcmIyN3RrYnE4azVkdmhvYjJyMzJ6MWNhZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/1W2IRdHez3gBmj7SEH/giphy.gif)
 
 This app has the robot grasp an object positioned in front of its arm, on the floor, about a meter away. You can see the [grasp practice video on YouTube](https://youtu.be/YmJKvmYRQ9o) to see how it works.
 
