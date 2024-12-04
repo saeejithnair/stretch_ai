@@ -1,6 +1,11 @@
-# Overview of Stretch_AI Repository
+# Overview of `stretch_ai` repository
 
 This document provides a detailed explanation of the `stretch_ai` repository, recently released by [Stretch Robotics](https://hello-robot.com/stretch-ai) and [Chris Paxton](https://itcanthink.substack.com/p/introducing-stretch-ai). It breaks down the system pipeline into distinct stages, focusing on how different components contribute to perception, mapping, and action.
+
+The Stretch_AI pipeline starts with data capture from two cameras: a Head Camera at 640x480 resolution and a Wrist Camera at 320x240 resolution. This data feeds into a mapping system that builds both 2D and 3D representations using Hector SLAM and ORB-SLAM3. The perception system supports multiple detection models including Detic, YOLO, YOLO-World, and OWL-ViT, along with various captioning models like Moonbeam, BLIP, and ViT-GPT2. SAM2 handles segmentation while a SigLIP encoder extracts key features from detected objects. The system maintains a memory of objects it has seen and can match them across different views.
+
+The pipeline integrates all components through sensor fusion, combining camera feeds with robot position data. ArUco markers help align point clouds and register object locations in the environment, while DynaMem continuously updates the semantic map. The entire system uses a hierarchical YAML configuration system that allows easy switching between different detection modules, captioners, and encoders. This modular architecture enables the system to process multiple operations in parallel and respond to environmental changes in real-time, making it effective for tasks ranging from navigation to object manipulation.
+
 
 # Table of Contents
 
