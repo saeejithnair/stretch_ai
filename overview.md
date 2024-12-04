@@ -2,7 +2,35 @@
 
 This document provides a detailed explanation of the `stretch_ai` repository, recently released by [Stretch Robotics](https://hello-robot.com/stretch-ai) and [Chris Paxton](https://itcanthink.substack.com/p/introducing-stretch-ai). It breaks down the system pipeline into distinct stages, focusing on how different components contribute to perception, mapping, and action.
 
-## 1. Data Ingestion
+# Table of Contents
+
+1. [Overview of Stretch_AI Repository](#overview-of-stretch_ai-repository)
+2. [Pipeline](#pipeline)
+   - [Data Ingestion](#data-ingestion)
+   - [Mapping: Building a 3D Understanding of the Environment](#mapping-building-a-3d-understanding-of-the-environment)
+   - [Integration of Perception and Mapping](#integration-of-perception-and-mapping)
+   - [Object Detection and Segmentation](#object-detection-and-segmentation)
+   - [Visual Understanding and Scene Representation](#visual-understanding-and-scene-representation)
+   - [Sensor Fusion](#sensor-fusion)
+3. [System Capabilities](#system-capabilities)
+4. [Data Collection with Dex Teleop](#data-collection-with-dex-teleop)
+5. [Configuration Guide](#configuration-guide)
+   - [Main Configuration Files](#main-configuration-files)
+   - [Configuration Hierarchy](#configuration-hierarchy)
+   - [Key Parameter Groups](#key-parameter-groups)
+   - [Configuration Tips](#configuration-tips)
+6. [End-to-End Pipeline Example](#end-to-end-pipeline-example)
+   - [Entry Point and Initialization](#entry-point-and-initialization)
+   - [Mapping and Exploration](#mapping-and-exploration)
+   - [Object Detection and Manipulation](#object-detection-and-manipulation)
+   - [Navigation and Manipulation](#navigation-and-manipulation)
+   - [Key Components and Their Interactions](#key-components-and-their-interactions)
+   - [Configuration Flow](#configuration-flow)
+   - [Visualization and Debugging](#visualization-and-debugging)
+
+
+# Pipeline
+## Data Ingestion
 
 This stage focuses on capturing input data from the robot's sensors.
 
@@ -30,7 +58,7 @@ ros2 run image_tools showimage /camera/color/image_raw
 ros2 run image_tools showimage /camera/depth/image_raw
 ```
 
-## 2. Mapping: Building a 3D Understanding of the Environment
+## Mapping: Building a 3D Understanding of the Environment
 
 This stage creates both 2D and 3D maps for navigation and semantic understanding.
 
@@ -50,7 +78,7 @@ ros2 launch stretch_ros2_bridge startup_stretch_orbslam.launch.py
 **Implementation:**
 - Code: `src/stretch/mapping/`
 
-## 3. Integration of Perception and Mapping
+## Integration of Perception and Mapping
 
 3D maps are used for navigation and task execution.
 
@@ -75,7 +103,7 @@ ros2 launch stretch_ros2_bridge startup_stretch_orbslam.launch.py
 **Implementation:**
 - `src/stretch/mapping/dynamem`
 
-## 4. Object Detection and Segmentation
+## Object Detection and Segmentation
 
 This stage extracts visual understanding from raw sensor data.
 
@@ -92,7 +120,7 @@ This stage extracts visual understanding from raw sensor data.
 - Visual feature extraction: `src/stretch/perception/encoders/`
 - Perception wrapper: `src/stretch/perception/wrapper.py`
 
-## 5. Visual Understanding and Scene Representation
+## Visual Understanding and Scene Representation
 
 The perception pipeline integrates detection with visual understanding for robust scene comprehension.
 
@@ -130,7 +158,7 @@ python -m stretch.perception.captioners.vit_gpt2_captioner --image_path object.p
 python -m stretch.perception.captioners.blip_captioner --image_path object.png
 ```
 
-## 6. Sensor Fusion
+## Sensor Fusion
 
 This stage combines data from multiple sensors to create a unified representation of the environment.
 
@@ -144,7 +172,7 @@ This stage combines data from multiple sensors to create a unified representatio
 - Fusion code: `src/stretch/agent/robot_agent.py`
 - ArUco integration: `src/stretch/perception/aruco/`
 
-## 7. System Capabilities
+## System Capabilities
 
 By integrating these components, the system enables:
 1. **Natural Language Navigation**: E.g., "Go to the cup"
@@ -152,7 +180,7 @@ By integrating these components, the system enables:
 3. **Dynamic Environment Understanding**: Supports live updates without rescanning
 4. **Continuous Operation**: Adapts to changes in real-time
 
-## 8. Data Collection with Dex Teleop
+## Data Collection with Dex Teleop
 
 For data collection, the system uses a low-cost teleoperation framework, **Dex Teleop**.
 
@@ -172,11 +200,11 @@ ros2 launch stretch_ros2_bridge server.launch.py
 python3 -m stretch.app.dex_teleop.ros2_leader --task-name default_task --teleop-mode base_x --save-images
 ```
 
-## Configuration Guide
+# Configuration Guide
 
 The Stretch_AI system uses a hierarchical configuration system with different YAML files for different purposes. Here's how to configure the system effectively:
 
-### Main Configuration Files:
+## Main Configuration Files:
 
 1. **dynav_config.yaml** (Dynamic Navigation):
    - Primary configuration for real-time operation
@@ -221,7 +249,7 @@ The Stretch_AI system uses a hierarchical configuration system with different YA
    - `pickup_cat_map.json`: Specific categories for manipulation
    - Define mappings between detection labels and robot actions
 
-### Configuration Hierarchy:
+## Configuration Hierarchy:
 
 1. **Base Settings**: `dynav_config.yaml`
    - Basic operation parameters
@@ -237,7 +265,7 @@ The Stretch_AI system uses a hierarchical configuration system with different YA
    - Specialized configs for specific applications
    - Override base settings for particular tasks
 
-### Key Parameter Groups:
+## Key Parameter Groups:
 
 1. **Perception**:
    ```yaml
@@ -272,7 +300,7 @@ The Stretch_AI system uses a hierarchical configuration system with different YA
      feature_match_threshold: 0.05
    ```
 
-### Configuration Tips:
+## Configuration Tips:
 
 1. **Start with Defaults**:
    - Use `dynav_config.yaml` for basic setup
@@ -295,13 +323,11 @@ The Stretch_AI system uses a hierarchical configuration system with different YA
    - Use motion thresholds to diagnose issues
 
 
-Here's the professionally formatted version of your document:
-
-## End-to-End Pipeline Example
+# End-to-End Pipeline Example
 
 Here's a walkthrough of how the system operates, using the main `ai_pickup` demo as an example:
 
-### 1. Entry Point and Initialization
+## Entry Point and Initialization
 ```bash
 python -m stretch.app.ai_pickup
 ```
@@ -322,7 +348,7 @@ python -m stretch.app.ai_pickup
    agent = RobotAgent(robot, parameters, semantic_sensor)
    ```
 
-### 2. Mapping and Exploration
+## Mapping and Exploration
 ```bash
 # Can also be run standalone
 python -m stretch.app.mapping --explore-iter 10
@@ -343,7 +369,7 @@ python -m stretch.app.mapping --explore-iter 10
    # 4. Moves robot
    ```
 
-### 3. Object Detection and Manipulation
+## Object Detection and Manipulation
 ```bash
 # Can test standalone with:
 python -m stretch.app.grasp_object --target_object "cup"
@@ -367,7 +393,7 @@ python -m stretch.app.grasp_object --target_object "cup"
    agent.grasp_object()
    ```
 
-### 4. Navigation and Manipulation
+## Navigation and Manipulation
 **Pipeline Stages:**
 1. **Path Planning**:
    ```python
@@ -381,7 +407,7 @@ python -m stretch.app.grasp_object --target_object "cup"
    - Executes pre-trained skills
    - Returns to navigation mode
 
-### Key Components and Their Interactions:
+## Key Components and Their Interactions:
 
 1. **Robot Agent** (`agent/robot_agent.py`):
    - Main interface coordinating all components
@@ -403,12 +429,12 @@ python -m stretch.app.grasp_object --target_object "cup"
    - Handles trajectory generation
    - Manages collision avoidance
 
-### Configuration Flow:
+## Configuration Flow:
 1. Base config: `dynav_config.yaml`
 2. Planning override: `default_planner.yaml`
 3. Task-specific: `config/app/.yaml`
 
-### Visualization and Debugging:
+## Visualization and Debugging:
 ```bash
 # Show intermediate maps
 python -m stretch.app.mapping --show-intermediate-maps
