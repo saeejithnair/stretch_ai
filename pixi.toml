@@ -1,0 +1,76 @@
+[project]
+name = "stretch-ai"
+description = "AI system for the Stretch robot"
+channels = ["nvidia/label/cuda-11.8.0", "nvidia", "conda-forge", "pytorch"]
+platforms = ["linux-64"]
+
+[system-requirements]
+libc = { family="glibc", version="2.30" }
+
+[tasks]
+uv-install = "python -m pip install uv"
+rerun-install = {cmd="python -c 'import rerun' || python -m uv pip install --no-build-isolation rerun-sdk", depends_on=["uv-install"]}
+detectron2-install = {cmd="python -c 'import detectron2' || python -m uv pip install --no-build-isolation git+https://github.com/facebookresearch/detectron2.git", depends_on=["uv-install"]}
+detic-init = {cmd="git submodule update --init --recursive", cwd="src/stretch/perception/detection/detic/Detic", depends_on=["detectron2-install"]}
+detic-requirements = {cmd="python -m uv pip install -r requirements.txt", cwd="src/stretch/perception/detection/detic/Detic", depends_on=["detic-init"]}
+detic-install = {cmd="mkdir -p models && wget --no-check-certificate https://dl.fbaipublicfiles.com/detic/Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max-size.pth -O models/Detic_LCOCOI21k_CLIP_SwinB_896b32_4x_ft4x_max-size.pth", cwd="src/stretch/perception/detection/detic/Detic", depends_on=["detic-requirements"]}
+sam-install = {cmd="python -c 'import segment_anything' || python -m uv pip install segment-anything", depends_on=["uv-install"]}
+post-install = {cmd="pwd", depends_on=["rerun-install","detectron2-install", "detic-install", "sam-install"]}
+
+[dependencies]
+python = "3.10.*"
+pip = ">=24.0,<25"
+cuda = {version = "*", channel="nvidia/label/cuda-11.8.0"}
+pytorch-cuda = {version = "11.8.*", channel="pytorch"}
+pytorch = {version = ">=2.2.0,<2.3", channel="pytorch"}
+torchvision = {version = ">=0.17.0,<0.18", channel="pytorch"}
+pyarrow = ">=15.0.2,<15.1"
+colmap = ">=3.9.1,<3.10"
+numpy = "<2.0.0"
+
+[pypi-dependencies]
+stretch-ai = { path = "./src", editable = true, extras = ["dev"]}
+hello-robot-stretch-urdf = "*"
+opencv-python = "*"
+pyyaml = "*"
+pyzmq = "*"
+numba = "*"
+scipy = "*"
+matplotlib = "*"
+trimesh = "*"
+yacs = "*"
+scikit-image = "*"
+sophuspy = "*"
+pin = "*"
+pynput = "*"
+pyusb = "*"
+schema = "*"
+overrides = "*"
+wget = "*"
+openai = "*"
+openai-clip = "*"
+pyrealsense2 = "*"
+urchin = "*"
+sentencepiece = "*"
+gitpython = "*"
+hydra-core = "*"
+timm = "*"
+huggingface-hub = "*"
+transformers = "*"
+accelerate = "*"
+einops = "*"
+pyliblzfse = "*"
+webp = "*"
+termcolor = "*"
+google-cloud-texttospeech = "*"
+gtts = "*"
+librosa = "*"
+PyAudio = ">=0.2.14"
+openai-whisper = "*"
+pydub = "*"
+pyttsx3 = "*"
+simpleaudio = "*"
+sounddevice = "*"
+wave = "*"
+scikit-fmm = "*"
+open3d = "*"

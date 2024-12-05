@@ -447,3 +447,9 @@ python -m stretch.app.mapping --show-intermediate-maps
 # Visualize specific components
 python -m stretch.app.read_map -i map.pkl --show-instances
 ```
+
+# Setup
+```
+unset PIXI_PROJECT_MANIFEST
+sudo apt-get install libasound-dev portaudio19-dev libportaudio2 libportaudiocpp0 espeak ffmpeg
+```
